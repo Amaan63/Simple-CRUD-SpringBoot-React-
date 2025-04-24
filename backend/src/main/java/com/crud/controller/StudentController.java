@@ -3,10 +3,7 @@ package com.crud.controller;
 import com.crud.entities.Students;
 import com.crud.service.StudentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,7 +19,17 @@ public class StudentController {
     }
 
     @GetMapping("/viewAllStudents")
-    public List<Students> getAllStudents(){
+    public List<Students> getAllStudentsController(){
         return studentService.getAllStudents();
+    }
+
+    @PutMapping("/updateStudent")
+    public Students updateStudentController(@RequestBody Students studentToUpdate){
+        return studentService.updateStudent(studentToUpdate);
+    }
+
+    @DeleteMapping("/deleteStudent/{id}")
+    public boolean deleteStudentController(@PathVariable long id){
+        return studentService.deleteStudent(id);
     }
 }
