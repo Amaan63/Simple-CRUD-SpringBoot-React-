@@ -16,7 +16,13 @@ const addStudent = () => {
     // setFormData function se formData state ko update kiya gaya hai
     // Spread operator (...FormData) purane formData ko copy karta hai
     // aur [name]: value se uss particular field ko update karta hai jisme change hua hai
-    setFormData({ ...FormData, [name]: value });
+    setFormData({ ...formData, [name]: value });
+    {
+      /*console.log(
+      "Updated:",
+      JSON.stringify({ ...formData, [name]: value }, null, 2)
+    ); */
+    }
   };
 
   // Jab form submit hota hai to ye function call hota hai
@@ -32,7 +38,7 @@ const addStudent = () => {
           <h2 className="text-2xl font-semibold mb-6 text-center">
             Add Student Form
           </h2>
-          <form onSubmit={handleSubmit()}>
+          <form onSubmit={handleSubmit}>
             <div className="mb-4">
               <label
                 htmlFor="id"
@@ -93,6 +99,7 @@ const addStudent = () => {
                 id="department"
                 name="department"
                 placeholder="Enter Student Department"
+                onChange={handleChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
             </div>
