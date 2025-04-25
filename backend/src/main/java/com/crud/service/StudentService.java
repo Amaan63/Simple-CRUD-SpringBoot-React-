@@ -26,7 +26,7 @@ public class StudentService {
         Optional<Students> existingStudent = studentRepo.findById(updatedStudent.getId());
         Students studentToUpdate = existingStudent.get();
         studentToUpdate.setAge(updatedStudent.getAge());
-        studentToUpdate.setName(updatedStudent.getName());
+        studentToUpdate.setStudentName(updatedStudent.getStudentName());
         studentToUpdate.setDepartment(updatedStudent.getDepartment());
         return studentRepo.save(studentToUpdate);
     }
