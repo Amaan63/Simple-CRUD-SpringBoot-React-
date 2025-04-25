@@ -1,3 +1,4 @@
+import axios from "axios";
 import React, { useState } from "react";
 
 const addStudent = () => {
@@ -14,7 +15,7 @@ const addStudent = () => {
     const { name, value } = e.target; // input ka name aur value extract kiya gaya hai
 
     // setFormData function se formData state ko update kiya gaya hai
-    // Spread operator (...FormData) purane formData ko copy karta hai
+    // Spread operator (...FormData) purane formData ko copy karta hai, yeh sab changes ka track rakhta hai aur last updated wale ko set kar deta hai
     // aur [name]: value se uss particular field ko update karta hai jisme change hua hai
     setFormData({ ...formData, [name]: value });
     {
@@ -26,9 +27,25 @@ const addStudent = () => {
   };
 
   // Jab form submit hota hai to ye function call hota hai
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault(); // Form submit hone par page reload na ho iske liye default action roka gaya hai
     console.log(formData); // Console me updated formData ko print kiya gaya hai
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/crudapp/addStudent",
+        formData
+      );
+      alert("Student Added Successfully");
+      // Clear the form after successful submission
+      setFormData({
+        id: "",
+        studentName: "",
+        age: "",
+        department: "",
+      });
+    } catch (error) {
+      alert("Error is coming: " + error.message);
+    }
   };
 
   return (
@@ -51,6 +68,7 @@ const addStudent = () => {
                 id="id"
                 name="id"
                 placeholder="Enter Student ID"
+                value={formData.id} // controlled input
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -67,6 +85,7 @@ const addStudent = () => {
                 id="studentName"
                 name="studentName"
                 placeholder="Enter Student Name"
+                value={formData.studentName} // controlled input
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -83,6 +102,7 @@ const addStudent = () => {
                 id="age"
                 name="age"
                 placeholder="Enter Student Age"
+                value={formData.age} // controlled input
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
@@ -99,6 +119,7 @@ const addStudent = () => {
                 id="department"
                 name="department"
                 placeholder="Enter Student Department"
+                value={formData.department} // controlled input
                 onChange={handleChange}
                 className="mt-1 p-2 w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
               />
