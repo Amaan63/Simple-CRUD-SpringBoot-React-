@@ -1,5 +1,6 @@
 import axios from "axios";
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const addStudent = () => {
   // React ka useState hook use karke formData naam ka ek state variable banaya gaya hai
@@ -50,6 +51,20 @@ const addStudent = () => {
 
   return (
     <>
+      <div className="flex flex-row items-center justify-center  gap-3 mt-2">
+        <Link
+          to="/"
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors "
+        >
+          Home Page
+        </Link>
+        <Link
+          to="/view-students"
+          className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
+        >
+          View Students
+        </Link>
+      </div>
       <div className="flex justify-center items-center h-screen bg-gray-100">
         <div className="bg-white p-8 rounded-lg shadow-lg w-96">
           <h2 className="text-2xl font-semibold mb-6 text-center">
