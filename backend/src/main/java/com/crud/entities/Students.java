@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 public class Students {
     @Id
     private long id;
-    private String name;
+    private String studentName;
     private int age;
     private String department;
 }
