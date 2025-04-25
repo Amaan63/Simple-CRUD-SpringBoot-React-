@@ -1,31 +1,66 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
+import UpdateStudentForm from "./updateStudentForm";
 
-const viewStudents = () => {
+const ViewStudents = () => {
   const [students, setStudents] = useState([]);
   const [error, setError] = useState(null);
+  const [selectedStudent, setSelectedStudent] = useState({
+    id: "",
+    studentName: "",
+    age: "",
+    department: "",
+  });
+  const [isFormOpen, setFormOpen] = useState(false);
 
   useEffect(() => {
     fetchStudents();
-  }, []); // Removed students.length to prevent infinite loops
+  }, []);
 
   const fetchStudents = async () => {
     try {
       const baseURL = "http://localhost:8080/crudapp/viewAllStudents";
       const response = await axios.get(baseURL);
       setStudents(response.data);
-      setError(null); // Clear any previous errors
+      setError(null);
     } catch (err) {
       setError("Server not responding. Please try again later.");
-      setStudents([]); // Clear students if there's an error
+      setStudents([]);
     }
   };
 
   const deleteStudent = async (id) => {
-    const baseURL = "http://localhost:8080/crudapp/deleteStudent/" + id;
-    await axios.delete(baseURL);
-    fetchStudents();
+    try {
+      await axios.delete(`http://localhost:8080/crudapp/deleteStudent/${id}`);
+      fetchStudents();
+    } catch (err) {
+      setError("Delete failed. Please try again.");
+    }
+  };
+
+  const handleUpdate = (student) => {
+    setSelectedStudent(student);
+    setFormOpen(true);
+  };
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setSelectedStudent({ ...selectedStudent, [name]: value });
+  };
+
+  const updateStudent = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        "http://localhost:8080/crudapp/updateStudent",
+        selectedStudent
+      );
+      setFormOpen(false);
+      fetchStudents();
+    } catch (error) {
+      setError("Failed to update student. Please try again.");
+    }
   };
 
   return (
@@ -46,20 +81,16 @@ const viewStudents = () => {
       </div>
       <h1 className="text-3xl font-bold text-center my-6">Student Details</h1>
 
-      {/* Simple error message */}
       {error && <p className="text-center text-red-500">{error}</p>}
-
-      {/* Message when no students exist */}
       {!error && students.length === 0 && (
         <p className="text-center text-gray-500">No students found</p>
       )}
 
-      {/* Student cards */}
       <div className="flex justify-center flex-wrap gap-4">
         {students.map((student) => (
           <div
             key={student.id}
-            className="bg-black rounded-2xl shadow-lg p-6 w-80 border border-gray-200"
+            className="relative bg-black rounded-2xl shadow-lg p-6 w-80 border border-gray-200"
           >
             <p className="text-green-500">
               <span className="font-semibold">ID:</span> {student.id}
@@ -74,22 +105,34 @@ const viewStudents = () => {
               <span className="font-semibold">Department:</span>{" "}
               {student.department}
             </p>
-            <div className="flex flex-row items-center justify-center gap-3 ">
+            <div className="flex flex-row items-center justify-center gap-3">
               <button
                 onClick={() => deleteStudent(student.id)}
                 className="bg-red-500 text-white py-2 px-4 rounded mt-4"
               >
                 Delete
               </button>
-              <button className="bg-green-500 text-white py-2 px-4 rounded mt-4">
+              <button
+                onClick={() => handleUpdate(student)}
+                className="bg-green-500 text-white py-2 px-4 rounded mt-4"
+              >
                 Update
               </button>
             </div>
           </div>
         ))}
+        {/* Pop up over the cards */}
+        {isFormOpen && (
+          <UpdateStudentForm
+            selectedStudent={selectedStudent}
+            handleChange={handleChange}
+            updateStudent={updateStudent}
+            setFormOpen={setFormOpen}
+          />
+        )}
       </div>
     </>
   );
 };
 
-export default viewStudents;
+export default ViewStudents;
