@@ -14,7 +14,12 @@ const viewStudents = () => {
     setStudents(response.data);
   };
 
-  
+  const deleteStudent = async (id) => {
+    const baseURL = "http://localhost:8080/crudapp/deleteStudent/" + id;
+    await axios.delete(baseURL);
+    fetchStudents();
+  };
+
   return (
     <>
       <h1 className="text-3xl font-bold text-center my-6">Student Details</h1>
@@ -37,7 +42,13 @@ const viewStudents = () => {
               <span className="font-semibold">Department:</span>{" "}
               {student.department}
             </p>
-            
+            {/* Delete Button */}
+            <button
+              onClick={() => deleteStudent(student.id)}
+              className="bg-red-500 text-white py-2 px-4 rounded mt-4"
+            >
+              Delete
+            </button>
           </div>
         ))}
       </div>
